@@ -24,6 +24,14 @@ class Team:
         self.losses += 1
         self.matches_played += 1
 
+    def add_points(self, points: int) -> None:
+        """Add points to the team's total points.
+        
+        Args:
+            points (int): The number of points to add
+        """
+        self.points += points
+
     def __eq__(self, other):
         if not isinstance(other, Team):
             return NotImplemented

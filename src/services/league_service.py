@@ -48,7 +48,7 @@ class LeagueService:
 
     def get_rankings(self) -> List[Tuple[int, str, int]]:
         """
-        Get the current rankings of all teams
+        Get the current rankings of all teams, sorted by points (descending) and name (alphabetically)
         
         Returns:
             List of tuples containing (rank, team_name, points)
@@ -58,7 +58,10 @@ class LeagueService:
             return []
 
         # Sort teams by points (descending) and name (alphabetically)
-        sorted_teams = sorted(self.teams.values())
+        sorted_teams = sorted(
+            self.teams.values(),
+            key=lambda team: (-team.points, team.name)  # Negative points for descending order
+        )
         
         # Generate rankings with proper handling of ties
         rankings: List[Tuple[int, str, int]] = []

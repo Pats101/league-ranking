@@ -47,3 +47,10 @@ Run tests:
 ```bash
 python -m pytest
 ```
+
+## Running Program with Example txt file in project root
+
+Run tests:
+```bash
+python -m src.main matches.txt
+```
