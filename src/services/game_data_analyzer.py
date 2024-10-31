@@ -10,18 +10,14 @@ class GameDataAnalyzer:
     def parse_line(line: str) -> Match:
         """Converts a match result line into a Match object"""
         try:
-            team1, team2 = line.split(',')
+            t1, t2 = line.split(',')
             
-            # Get name and score for each team
-            name1, score1 = team1.strip().rsplit(' ', 1)
-            name2, score2 = team2.strip().rsplit(' ', 1)
+            # Split name and score for each team
+            name1, score1 = t1.strip().rsplit(' ', 1)
+            name2, score2 = t2.strip().rsplit(' ', 1)
             
-            return Match(
-                name1.strip(), 
-                int(score1),
-                name2.strip(), 
-                int(score2)
-            )
+            return Match(name1.strip(), int(score1),
+                        name2.strip(), int(score2))
         except (ValueError, IndexError):
             raise ValueError(INVALID_MATCH_FORMAT)
 
