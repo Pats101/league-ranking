@@ -17,13 +17,13 @@ class LeagueService:
     
     def __init__(self) -> None:
         self.teams: Dict[str, Team] = defaultdict(lambda: Team(""))
-        logger.info("Initialized new league")
+        logger.info("New league started")
 
     def process_match(self, match: Match) -> None:
         """Updates team standings based on match result"""        
         # Get or create teams
-        team1 = self._get_or_create_team(match.team1)
-        team2 = self._get_or_create_team(match.team2)
+        team1 = self._get_team(match.team1)
+        team2 = self._get_team(match.team2)
         
         # Calculate and award points
         if match.score1 > match.score2:  # Team 1 wins
@@ -36,9 +36,7 @@ class LeagueService:
             team1.add_points(POINTS_FOR_DRAW)
             team2.add_points(POINTS_FOR_DRAW)
 
-    TeamRanking = Tuple[int, str, int]  # rank, name, points
-
-    def get_rankings(self) -> List[TeamRanking]:
+    def get_rankings(self) -> List[Tuple[int, str, int]]:
         """Get the current rankings of all teams, sorted by points (descending) and name (alphabetically)"""
         if not self.teams:
             return []
@@ -46,27 +44,27 @@ class LeagueService:
         # Sort teams by points (descending) and name (alphabetically)
         sorted_teams = sorted(
             self.teams.values(),
-            key=lambda team: (-team.points, team.name)  # Negative points for descending order
+            key=lambda t: (-t.points, t.name)  # Negative points for descending order
         )
         
         # Generate rankings with proper handling of ties
-        rankings: List[TeamRanking] = []
-        current_rank = 1
-        previous_points = None
+        rankings = []
+        rank = 1
+        prev_pts = None
         
         for i, team in enumerate(sorted_teams):
-            if previous_points is not None and team.points != previous_points:
-                current_rank = i + 1
-            rankings.append((current_rank, team.name, team.points))
-            previous_points = team.points
+            if prev_pts is not None and team.points != prev_pts:
+                rank = i + 1
+            rankings.append((rank, team.name, team.points))
+            prev_pts = team.points
         return rankings
     
 
-    def _get_or_create_team(self, team_name: str) -> Team:
+    def _get_team(self, name: str) -> Team:
         """Get an existing team or create a new one"""
-        if team_name not in self.teams:
-            self.teams[team_name] = Team(team_name)
-        return self.teams[team_name]
+        if name not in self.teams:
+            self.teams[name] = Team(name)
+        return self.teams[name]
     
     def clear(self) -> None:
         """Clear all teams and rankings"""
