@@ -25,11 +25,7 @@ class Team:
         self.matches_played += 1
 
     def add_points(self, points: int) -> None:
-        """Add points to the team's total points.
-        
-        Args:
-            points (int): The number of points to add
-        """
+        """Add points to the team's total points."""
         self.points += points
 
     def __eq__(self, other):
@@ -37,14 +33,14 @@ class Team:
             return NotImplemented
         return self.name == other.name and self.points == other.points
 
-    def __lt__(self, other):
+    def __lt__(self, other) -> bool:
         if not isinstance(other, Team):
             return NotImplemented
         # First compare by points (descending)
         if self.points != other.points:
             return self.points < other.points
         # If points are equal, compare by name (ascending)
-        return self.name < other.name
+        return self.name.lower() > other.name.lower()  # Changed direction for alphabetical ordering
 
     def __gt__(self, other):
         if not isinstance(other, Team):
